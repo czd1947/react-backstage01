@@ -1,6 +1,7 @@
 import React from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import {Button, Form, Input, Checkbox} from "antd"
+import request from "../../api/ajax"
 import logo from "../../assets/images/logo.png"
 import "./index.css"
 
@@ -8,6 +9,14 @@ export default function login() {
     // 已取消默认事件
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
+        // 发送ajax 请求
+        let baseUrl = "http://mutuopan.com/index.php/api/"
+        request(baseUrl + "bs-login", values, "post").then(response => {
+            console.log(response)
+        }).catch( err => {
+            console.log(err)
+        })
+
     };
   return (
     <>
