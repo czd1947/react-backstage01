@@ -1,0 +1,1 @@
+export const ADMINUSER = "admin_user"
