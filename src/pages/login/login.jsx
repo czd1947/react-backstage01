@@ -1,13 +1,29 @@
 import React from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import {Button, Form, Input, Checkbox} from "antd"
+import {Button, Form, Input, Checkbox, message} from "antd"
+
+import {loginReq} from "../../api/index"
+
 import logo from "../../assets/images/logo.png"
 import "./index.css"
 
 export default function login() {
     // 已取消默认事件
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+    const onFinish = async (values) => {
+        // console.log('Received values of form: ', values);
+        const {name, password} = values
+        // 等待返回结果
+        let response = await loginReq(name,  password)
+        console.log(response)
+        if(response.code === 200) {
+            // 登录成功的操作
+            message.info(response.msg)
+            
+        } else {
+            // 登录失败的操作
+            message.error(response.msg)
+        }
+
     };
   return (
     <>
@@ -26,12 +42,24 @@ export default function login() {
             >
                 {/* 账号栏 */}
                 <Form.Item
-                    name="username"
+                    name="name"
                     rules={[
                     {
                         required: true,
                         message: '账号必填!',
                     },
+                    {
+                        min: 4,
+                        message: "最少4位"
+                    },
+                    {
+                        max: 12,
+                        message: "最多12位"
+                    },
+                    {
+                        pattern: /^[a-zA-Z0-9_]+$/,
+                        message: "必须是英文数字或_组合的字符"
+                    }
                     ]}
                 >
                     <Input className="com-input user-input" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" />
